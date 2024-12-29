@@ -1,0 +1,160 @@
+viewdetail.php
+
+<?php
+	include "userbar.php";
+	include "dbconnection.php";
+	$view_id=$_GET['view'];
+	$sql="SELECT * FROM products WHERE product_id='$view_id'";
+	$qry=mysqli_query($cn,$sql);
+	$rcd=mysqli_fetch_array($qry);
+?>
+<html>
+<head>
+</head>
+<body>
+<center><h2>Product Details</h2></center>
+    <img src="uploads\<?php echo $rcd['product_image']; ?>" width="200" height="200" /><br>
+	Product Name : <?php echo $rcd['product_title']; ?><br>
+	Product Brand : <?php echo $rcd['product_brand']; ?><br>
+	Product Category : <?php echo $rcd['product_cat']; ?><br>
+	Product Qty :<?php echo $rcd['product_qty']; ?><br>
+	Product Price : ₹ <?php echo $rcd['product_price']; ?><br>
+	Product Description :<?php echo $rcd['product_desc']; ?><br>
+	<a href="product_view.php">Back </a>
+	<p><button>Add to Cart</button></p>
+	
+</table>
+</body>
+</html>
+
+product_view.php
+==========
+<?php
+ include "userbar.php";
+ include "dbconnection.php";
+ $sql="Select * from products";
+ $qry=mysqli_query($cn,$sql);
+ $rcd=mysqli_fetch_array($qry);
+?>
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  max-width: 300px;
+  margin: auto;
+  text-align: center;
+  font-family: arial;
+	  top:0px;
+  left:50px;
+}
+
+.price {
+  color: grey;
+  font-size: 22px;
+}
+
+.card button {
+  border: none;
+  outline: 0;
+  padding: 12px;
+  color: green;
+  background-color: #000;
+  text-align: center;
+  cursor: pointer;
+  width: 100%;
+  position:relative;
+
+  font-size: 18px;
+}
+
+.card button:hover {
+  opacity: 0.7;
+}
+.container {
+    display: flex;
+    justify-content: space-between;
+flex-direction: row;
+flex-wrap: wrap;
+margin:left;
+}
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Float four columns side by side */
+.column {
+  float: left;
+  width: 25%;
+  padding: 0 10px;
+}
+
+/* Remove extra left and right margins, due to padding */
+.row {margin: 0 -5px;}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Responsive columns */
+@media screen and (max-width: 600px) {
+  .column {
+    width: 100%;
+    display: block;
+    margin-bottom: 20px;
+  }
+}
+
+/* Style the counter cards */
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  padding: 16px;
+  text-align: center;
+  background-color: #f1f1f1;
+}
+ 
+</style>
+</head>
+<body>
+
+<?php
+ do
+ {
+?>
+<div class="container">
+<div class="colums">
+<div class="row">
+     <div class="card">
+<div class="card">
+<form method="POST" action="addtocart.php">
+  <img src="uploads\<?php echo $rcd['product_image']; ?>" width="150" height="150" />
+  <input type="text" name="product_image" value="<?php echo $rcd['product_image']; ?>" hidden/>
+  <h1><?php echo $rcd['product_title']; ?></h1>
+  <input type="text" name="product_title" value="<?php echo $rcd['product_title']; ?>" hidden/>
+  <p class="price">₹ <?php echo $rcd['product_price']; ?></p>
+  <input type="text" name="product_price" value="<?php echo $rcd['product_price']; ?>" hidden/>
+  <p>Qty :<input type="text" name="product_qty" value="<?php echo $rcd['product_qty']; ?>"</p>
+  <p><a href="viewdetail.php?view=<?php echo $rcd['product_id'];?>" style="color:red" >View Details</a>
+  <input type="text" name="product_id" value="<?php echo $rcd['product_id']; ?>" hidden/>
+  <p><button name="cart">Add to Cart</button></p>
+</form>
+</div>
+</div>
+</div>
+</div>
+
+
+<?php
+	}while($rcd=mysqli_fetch_array($qry));
+	mysqli_close($cn);
+?>
+</body>
+</html>
